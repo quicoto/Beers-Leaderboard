@@ -154,14 +154,14 @@ function beers_shortcode() {
     'posts_per_page' => 5,
     'meta_query' => array(
         'relation' => 'AND',
-        'count_claouse' => array(
-            'key' => 'count',
-            'compare' => 'EXISTS',
-        ),
         'score_clause' => array(
             'key' => 'count',
             'compare' => 'EXISTS',
         ),
+        'count_claouse' => array(
+            'key' => 'count',
+            'compare' => 'EXISTS',
+        )
     ),
     'orderby' => array(
       'count_clause' => 'DESC',
