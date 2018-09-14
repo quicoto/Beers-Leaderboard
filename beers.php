@@ -164,8 +164,8 @@ function beers_shortcode() {
         )
     ),
     'orderby' => array(
-      'count_clause' => 'DESC',
       'score_clause' => 'DESC',
+      'count_clause' => 'DESC',
     ),
     'post_type' => 'beer'
   );
