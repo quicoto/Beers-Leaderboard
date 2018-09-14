@@ -1,9 +1,9 @@
 <?php
 
 /*
-Plugin Name: Beers Post Type
+Plugin Name: Beers
 Plugin URI: http://php.quicoto.com
- * Description: This adds the a beer post type
+ * Description: This adds the a beer post type and shortcode for leaderboards.
  * Version: 1.0
  * Author: quicoto
  * Author URI: http://php.quicoto.com
