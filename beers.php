@@ -152,9 +152,21 @@ function beers_shortcode() {
   */
   $args = array(
     'posts_per_page' => 5,
-    'order' => 'DESC',
-    'orderby'   => 'meta_value_num',
-	  'meta_key'  => 'rating_score',
+    'meta_query' => array(
+        'relation' => 'AND',
+        'count_claouse' => array(
+            'key' => 'count',
+            'compare' => 'EXISTS',
+        ),
+        'score_clause' => array(
+            'key' => 'count',
+            'compare' => 'EXISTS',
+        ),
+    ),
+    'orderby' => array(
+      'count_clause' => 'DESC',
+      'score_clause' => 'DESC',
+    ),
     'post_type' => 'beer'
   );
 
