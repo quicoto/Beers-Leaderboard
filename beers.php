@@ -155,7 +155,7 @@ function beers_shortcode() {
     'meta_query' => array(
         'relation' => 'AND',
         'score_clause' => array(
-            'key' => 'count',
+            'key' => 'rating_score',
             'compare' => 'EXISTS',
         ),
         'count_claouse' => array(
