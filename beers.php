@@ -117,9 +117,23 @@ function beers_shortcode() {
   */
   $args = array(
     'posts_per_page' => 5,
-    'order' => 'DESC',
-    'orderby'   => 'meta_value_num',
-	  'meta_key'  => 'count',
+    'meta_query' => array(
+        'relation' => 'AND',
+        'score_clause' => array(
+            'key' => 'rating_score',
+            'type'    => 'NUMERIC',
+            'compare' => 'EXISTS',
+        ),
+        'count_clause' => array(
+            'key' => 'count',
+            'type'    => 'NUMERIC',
+            'compare' => 'EXISTS',
+        )
+    ),
+    'orderby' => array(
+      'count_clause' => 'DESC',
+      'score_clause' => 'DESC'
+    ),
     'post_type' => 'beer'
   );
 
@@ -157,17 +171,17 @@ function beers_shortcode() {
         'score_clause' => array(
             'key' => 'rating_score',
             'type'    => 'NUMERIC',
-            'compare' => 'EXISTS',
+            'compare' => 'EXISTS'
         ),
         'count_clause' => array(
             'key' => 'count',
             'type'    => 'NUMERIC',
-            'compare' => 'EXISTS',
+            'compare' => 'EXISTS'
         )
     ),
     'orderby' => array(
       'score_clause' => 'DESC',
-      'count_clause' => 'DESC',
+      'count_clause' => 'DESC'
     ),
     'post_type' => 'beer'
   );
