@@ -156,10 +156,12 @@ function beers_shortcode() {
         'relation' => 'AND',
         'score_clause' => array(
             'key' => 'rating_score',
+            'type'    => 'NUMERIC',
             'compare' => 'EXISTS',
         ),
         'count_claouse' => array(
             'key' => 'count',
+            'type'    => 'NUMERIC',
             'compare' => 'EXISTS',
         )
     ),
