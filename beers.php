@@ -159,7 +159,7 @@ function beers_shortcode() {
             'type'    => 'NUMERIC',
             'compare' => 'EXISTS',
         ),
-        'count_claouse' => array(
+        'count_clause' => array(
             'key' => 'count',
             'type'    => 'NUMERIC',
             'compare' => 'EXISTS',
