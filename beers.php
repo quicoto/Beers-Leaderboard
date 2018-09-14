@@ -65,46 +65,124 @@ function beer_post_type() {
 }
 add_action( 'init', 'beer_post_type', 0 );
 
+/*
+AVAILABLE META FIELDS
+From: https://github.com/quicoto/Untappd-WordPress-Import/blob/master/beer_import.php
 
+  - beer_style
+  - bid
+  - count (times drinked)
+  - rating_score
+  - recent_created_at
+*/
 
 // Add Shortcode
 function beers_shortcode() {
+  $results_per_leaderboard = 10;
+
+  /*
+    Last Drinked
+  */
   $args = array(
-    'posts_per_page' => -1,
-    'order' => 'ASC',
-    'orderby' => 'title',
-'post_type' => 'beer'
+    'posts_per_page' => $results_per_leaderboard,
+    'order' => 'DESC',
+    'orderby'   => 'modified',
+    'post_type' => 'beer'
   );
 
   $beers = get_posts( $args );
+  echo "<h2>Last drinked</h2>";
+  echo "<ul>";
+    foreach ( $beers as $post ) : setup_postdata( $post );
+      echo '<li>';
+        echo '<a href="' . get_the_permalink($post). '">' . get_the_title($post) . '</a>';
 
-  foreach ( $beers as $post ) : setup_postdata( $post );
-    echo '<div>';
-      echo '<h2><a href="' . get_the_permalink($post). '">' . get_the_title($post) . '</a></h2>';
-      echo '<div>' . get_the_content() . '</div>';
-      echo '<ul style="margin-top: 15px;">';
         $score = get_post_meta( $post->ID, 'rating_score', true );
-        if ($score) {
-          echo '<li>Beer score: ' . $score . '</li>';
-        }
-
-        $style = get_post_meta( $post->ID, 'beer_style', true );
-        if ($style) {
-          echo '<li>Beer style: ' . $style . '</li>';
+        if (!$score) {
+          $score = "Unknown";
         }
 
         $count = get_post_meta( $post->ID, 'count', true );
         if ($count) {
-          echo '<li>Times drinked: ' . $count . '</li>';
+          $count = "Unknown";
         }
 
-        $recent_created_at = get_post_meta( $post->ID, 'recent_created_at', true );
-        if ($recent_created_at) {
-          echo '<li>Latest drink: ' . $recent_created_at . '</li>';
-        }
-      echo '</ul>';
-    echo '</div>';
-  endforeach;
+        echo "(Score: " . $score . ", Drinked: " . $count . ")";
+      echo '</li>';
+    endforeach;
+  echo "</ul>";
   wp_reset_postdata();
+
+
+  /*
+    Most Drinked
+  */
+  $args = array(
+    'posts_per_page' => $results_per_leaderboard,
+    'order' => 'DESC',
+    'orderby'   => 'meta_value_num',
+	  'meta_key'  => 'count',
+    'post_type' => 'beer'
+  );
+
+  $beers = get_posts( $args );
+
+  echo "<h2>Most Drinked</h2>";
+  echo "<ul>";
+    foreach ( $beers as $post ) : setup_postdata( $post );
+      echo '<li>';
+        echo '<a href="' . get_the_permalink($post). '">' . get_the_title($post) . '</a>';
+
+        $score = get_post_meta( $post->ID, 'rating_score', true );
+        if (!$score) {
+          $score = "Unknown";
+        }
+
+        $count = get_post_meta( $post->ID, 'count', true );
+        if ($count) {
+          $count = "Unknown";
+        }
+
+        echo "(Score: " . $score . ", Drinked: " . $count . ")";
+      echo '</li>';
+    endforeach;
+  echo "</ul>";
+  wp_reset_postdata();
+
+  /*
+    Best Rated
+  */
+  $args = array(
+    'posts_per_page' => $results_per_leaderboard,
+    'order' => 'DESC',
+    'orderby'   => 'meta_value_num',
+	  'meta_key'  => 'rating_score',
+    'post_type' => 'beer'
+  );
+
+  $beers = get_posts( $args );
+
+  echo "<h2>Best Rated</h2>";
+  echo "<ul>";
+    foreach ( $beers as $post ) : setup_postdata( $post );
+      echo '<li>';
+        echo '<a href="' . get_the_permalink($post). '">' . get_the_title($post) . '</a>';
+
+        $score = get_post_meta( $post->ID, 'rating_score', true );
+        if (!$score) {
+          $score = "Unknown";
+        }
+
+        $count = get_post_meta( $post->ID, 'count', true );
+        if ($count) {
+          $count = "Unknown";
+        }
+
+        echo "(Score: " . $score . ", Drinked: " . $count . ")";
+      echo '</li>';
+    endforeach;
+  echo "</ul>";
+  wp_reset_postdata();
+
 }
 add_shortcode( 'beers', 'beers_shortcode' );
