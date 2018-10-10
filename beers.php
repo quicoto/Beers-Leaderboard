@@ -210,8 +210,10 @@ function beers_shortcode() {
   $printed_brews = [];
 
   // Add all the unique beers
-  foreach ( $beers as $beer ) {
-    if (!array_search($beer, $printed_brews)) {
+  foreach ( $beers as $key => $beer ) {
+    if (array_search($beer, $printed_brews)) {
+      unset($beers[$key]);
+    } else {
       array_push($printed_brews, $beer);
     }
   }
@@ -219,7 +221,7 @@ function beers_shortcode() {
   echo "<h2>Best Rated</h2>";
   echo "<ul>";
     $index = 1;
-    foreach ( $printed_brews as $beer ) :
+    foreach ( $beers as $beer ) :
       // if ($index == 5) break;
       setup_postdata( $beer );
       echo '<li>';
