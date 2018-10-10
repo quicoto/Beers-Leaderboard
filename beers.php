@@ -219,7 +219,7 @@ function beers_shortcode() {
   // We are quering all the beers ordered by Score.
   // Now we loop them all and add the score to it, to then re order that array
   foreach ( $beers as $beer ) {
-    $score = get_post_meta( $post->ID, 'rating_score', true );
+    $score = get_post_meta( $beer->ID, 'rating_score', true );
     if (!$score) {
       $score = 0;
     }
