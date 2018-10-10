@@ -206,16 +206,10 @@ function beers_shortcode() {
             'key' => 'rating_score',
             'type'    => 'NUMERIC',
             'compare' => 'EXISTS'
-        ),
-        'count_clause' => array(
-            'key' => 'count',
-            'type'    => 'NUMERIC',
-            'compare' => 'EXISTS'
         )
     ),
     'orderby' => array(
-      'score_clause' => 'DESC',
-      'count_clause' => 'DESC'
+      'score_clause' => 'DESC'
     ),
     'post_type' => 'beer'
   );
@@ -234,7 +228,8 @@ function beers_shortcode() {
           $score = "Unknown";
         }
 
-        $count = get_post_meta( $post->ID, 'count', true );
+        $query = new WP_Query( array( $taxonomy_brew => $brew[0]->name ) );
+        $count = $query->found_posts;
         if (!$count) {
           $count = "Unknown";
         }
