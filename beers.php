@@ -199,7 +199,7 @@ function beers_shortcode() {
     Best Rated
   */
   $args = array(
-    'posts_per_page' => 10,
+    'posts_per_page' => -1,
     'meta_key' => 'rating_score',
     'orderby'   => 'meta_value_num',
     'post_type' => 'beer'
@@ -207,9 +207,21 @@ function beers_shortcode() {
 
   $beers = get_posts( $args );
 
+  $printed_brews = [];
+
+  // Add all the unique beers
+  foreach ( $beers as $beer ) {
+    if (!array_search($beer, $printed_brews)) {
+      array_push($printed_brews, $beer);
+    }
+  }
+
   echo "<h2>Best Rated</h2>";
   echo "<ul>";
-    foreach ( $beers as $beer ) : setup_postdata( $beer );
+    $index = 1;
+    foreach ( $printed_brews as $beer ) :
+      // if ($index == 5) break;
+      setup_postdata( $beer );
       echo '<li>';
         $brew = wp_get_post_terms( $beer->ID, $taxonomy_brew );
         echo $brew[0]->name;
@@ -227,6 +239,7 @@ function beers_shortcode() {
 
         echo " (Score: " . $score . ", Drinked: " . $count . ")";
       echo '</li>';
+      $index++;
     endforeach;
   echo "</ul>";
   wp_reset_postdata();
