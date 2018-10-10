@@ -154,51 +154,45 @@ function beers_shortcode() {
   /*
     Most Drinked
   */
-  $args = array(
-    'posts_per_page' => 5,
-    'meta_query' => array(
-        'relation' => 'AND',
-        'score_clause' => array(
-            'key' => 'rating_score',
-            'type'    => 'NUMERIC',
-            'compare' => 'EXISTS',
-        ),
-        'count_clause' => array(
-            'key' => 'count',
-            'type'    => 'NUMERIC',
-            'compare' => 'EXISTS',
-        )
-    ),
-    'orderby' => array(
-      'count_clause' => 'DESC',
-      'score_clause' => 'DESC'
-    ),
-    'post_type' => 'beer'
-  );
-
-  $beers = get_posts( $args );
+  $brews = get_terms( $taxonomy_brew, 'orderby=count&hide_empty=0' );
+  if ( ! empty( $brews ) && ! is_wp_error( $brews ) ){
 
   echo "<h2>Most Drinked</h2>";
   echo "<ul>";
-    foreach ( $beers as $post ) : setup_postdata( $post );
+    foreach ( $brews as $brew ) {
       echo '<li>';
-        $brew = wp_get_post_terms( $post->ID, $taxonomy_brew );
-        echo $brew[0]->name;
+      echo $brew->name;
 
-        $score = get_post_meta( $post->ID, 'rating_score', true );
-        if (!$score) {
-          $score = "Unknown";
-        }
+      // Get the latest check-in score
+      $args = array(
+        'posts_per_page' => 1,
+        'order' => 'DESC',
+        'orderby'   => 'modified',
+        'post_type' => 'beer',
+        'tax_query' => array(
+          array(
+            'taxonomy' => $taxonomy_brew,
+            'field' => 'term_id',
+            'terms' => $brew->ID
+          )
+        )
+      );
+      $beers = get_posts( $args );
+      $score = get_post_meta( $beers[0]->ID, 'rating_score', true );
+      if (!$score) {
+        $score = "Unknown";
+      }
 
-        $count = get_post_meta( $post->ID, 'count', true );
-        if (!$count) {
-          $count = "Unknown";
-        }
+      // $count = get_post_meta( $post->ID, 'count', true );
+      if (!$count) {
+        $count = "Unknown";
+      }
 
-        echo " (Score: " . $score . ", Drinked: " . $count . ")";
+      echo " (Score: " . $score . ", Drinked: " . $count . ")";
       echo '</li>';
-    endforeach;
-  echo "</ul>";
+    }
+    echo "</ul>";
+  }
   wp_reset_postdata();
 
   /*
