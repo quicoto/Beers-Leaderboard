@@ -212,6 +212,9 @@ function beers_shortcode() {
   // Add all the unique beers
   foreach ( $beers as $key => $beer ) {
     $brew_id = get_post_meta( $beer->ID, 'bid', true );
+    $score = get_post_meta( $beer->ID, 'rating_score', true );
+
+    $beer->score = $score;
 
     if (array_search($brew_id, $printed_brews)) {
       unset($beers[$key]);
@@ -219,6 +222,9 @@ function beers_shortcode() {
       array_push($printed_brews, $brew_id);
     }
   }
+
+  echo "<pre>";
+  print_r($beers);
 
   echo "<h2>Best Rated</h2>";
   echo "<ul>";
