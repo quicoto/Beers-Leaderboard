@@ -199,9 +199,8 @@ function beers_shortcode() {
     Best Rated
   */
   $args = array(
-    'posts_per_page' => -1,
+    'posts_per_page' => 10,
     'meta_query' => array(
-        'relation' => 'AND',
         'score_clause' => array(
             'key' => 'rating_score',
             'type'    => 'NUMERIC',
@@ -243,7 +242,7 @@ function beers_shortcode() {
   /*
     All Beers
   */
-  $brews = get_terms( $taxonomy_brew, 'orderby=name&order=ASC&hide_empty=0&number=5' );
+  $brews = get_terms( $taxonomy_brew, 'orderby=name&order=ASC&hide_empty=0' );
   if ( ! empty( $brews ) && ! is_wp_error( $brews ) ){
 
   echo "<h2>All ever tasted</h2>";
