@@ -211,10 +211,12 @@ function beers_shortcode() {
 
   // Add all the unique beers
   foreach ( $beers as $key => $beer ) {
-    if (array_search($beer->name, $printed_brews)) {
+    $brew_id = get_post_meta( $beer->ID, 'bid', true );
+
+    if (array_search($brew_id, $printed_brews)) {
       unset($beers[$key]);
     } else {
-      array_push($printed_brews, $beer->name);
+      array_push($printed_brews, $brew_id);
     }
   }
 
