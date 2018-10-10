@@ -199,7 +199,7 @@ function beers_shortcode() {
     Best Rated
   */
   $args = array(
-    'posts_per_page' => 5,
+    'posts_per_page' => -1,
     'meta_query' => array(
         'relation' => 'AND',
         'score_clause' => array(
@@ -216,6 +216,21 @@ function beers_shortcode() {
 
   $beers = get_posts( $args );
 
+  // We are quering all the beers ordered by Score.
+  // Now we loop them all and add the score to it, to then re order that array
+  foreach ( $beers as $beer ) {
+    $score = get_post_meta( $post->ID, 'rating_score', true );
+    if (!$score) {
+      $score = 0;
+    }
+
+    $beer->score = $score;
+  }
+
+  // usort($beers, function($a, $b) {
+  //   return $a['score'] <=> $b['score'];
+  // });
+
   echo "<h2>Best Rated</h2>";
   echo "<ul>";
     foreach ( $beers as $post ) : setup_postdata( $post );
@@ -223,7 +238,7 @@ function beers_shortcode() {
         $brew = wp_get_post_terms( $post->ID, $taxonomy_brew );
         echo $brew[0]->name;
 
-        $score = get_post_meta( $post->ID, 'rating_score', true );
+        $score = $post->score;
         if (!$score) {
           $score = "Unknown";
         }
