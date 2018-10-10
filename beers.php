@@ -216,21 +216,6 @@ function beers_shortcode() {
 
     // Get the brew
     $brew = wp_get_post_terms( $beer->ID, $taxonomy_brew );
-    // Get the latest check-in score
-    $args = array(
-      'posts_per_page' => 1,
-      'order' => 'DESC',
-      'orderby'   => 'modified',
-      'post_type' => 'beer',
-      'tax_query' => array(
-        array(
-          'taxonomy' => $taxonomy_brew,
-          'field' => 'term_id',
-          'terms' => $brew->term_id
-        )
-      )
-    );
-    $beers = get_posts( $args );
     $beer->count = $brew->count;
 
     if (array_search($brew_id, $printed_brews)) {
