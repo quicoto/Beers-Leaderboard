@@ -178,6 +178,7 @@ function beers_shortcode() {
         )
       );
       $beers = get_posts( $args );
+
       $score = get_post_meta( $beers[0]->ID, 'rating_score', true );
       if (!$score) {
         $score = "Unknown";
@@ -212,9 +213,25 @@ function beers_shortcode() {
   // Add all the unique beers
   foreach ( $beers as $key => $beer ) {
     $brew_id = get_post_meta( $beer->ID, 'bid', true );
-    $score = get_post_meta( $beer->ID, 'rating_score', true );
 
-    $beer->score = $score;
+    // Get the brew
+    $brew = wp_get_post_terms( $beer->ID, $taxonomy_brew );
+    // Get the latest check-in score
+    $args = array(
+      'posts_per_page' => 1,
+      'order' => 'DESC',
+      'orderby'   => 'modified',
+      'post_type' => 'beer',
+      'tax_query' => array(
+        array(
+          'taxonomy' => $taxonomy_brew,
+          'field' => 'term_id',
+          'terms' => $brew->term_id
+        )
+      )
+    );
+    $beers = get_posts( $args );
+    $beer->count = $brew->count;
 
     if (array_search($brew_id, $printed_brews)) {
       unset($beers[$key]);
