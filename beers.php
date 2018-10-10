@@ -154,7 +154,7 @@ function beers_shortcode() {
   /*
     Most Drinked
   */
-  $brews = get_terms( $taxonomy_brew, 'orderby=count&hide_empty=0' );
+  $brews = get_terms( $taxonomy_brew, 'orderby=count&hide_empty=0&limit=5' );
   if ( ! empty( $brews ) && ! is_wp_error( $brews ) ){
 
   echo "<h2>Most Drinked</h2>";
