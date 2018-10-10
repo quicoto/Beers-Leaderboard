@@ -154,7 +154,7 @@ function beers_shortcode() {
   /*
     Most Drinked
   */
-  $brews = get_terms( $taxonomy_brew, 'orderby=count&hide_empty=0&posts_per_page=5' );
+  $brews = get_terms( $taxonomy_brew, 'orderby=count&order=DESC&hide_empty=0&number=5' );
   if ( ! empty( $brews ) && ! is_wp_error( $brews ) ){
 
   echo "<h2>Most Drinked</h2>";
@@ -173,7 +173,7 @@ function beers_shortcode() {
           array(
             'taxonomy' => $taxonomy_brew,
             'field' => 'term_id',
-            'terms' => $brew->ID
+            'terms' => $brew->term_id
           )
         )
       );
@@ -183,7 +183,7 @@ function beers_shortcode() {
         $score = "Unknown";
       }
 
-      // $count = get_post_meta( $post->ID, 'count', true );
+      $count = $brew->count;
       if (!$count) {
         $count = "Unknown";
       }
