@@ -268,7 +268,8 @@ function beers_shortcode() {
   echo "<ul>";
     foreach ( $beers as $post ) : setup_postdata( $post );
       echo '<li>';
-        echo '<a href="' . get_the_permalink($post). '">' . get_the_title($post) . '</a>';
+        $brew = wp_get_post_terms( $post->ID, 'brew' );
+        echo $brew[0]->name;
 
         $score = get_post_meta( $post->ID, 'rating_score', true );
         if (!$score) {
