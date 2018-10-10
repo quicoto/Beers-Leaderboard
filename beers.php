@@ -117,6 +117,7 @@ From: https://github.com/quicoto/Untappd-WordPress-Import/blob/master/beer_impor
 
 // Add Shortcode
 function beers_shortcode() {
+  $taxonomy_brew = 'brew';
   /*
     Last Drinked
   */
@@ -132,7 +133,7 @@ function beers_shortcode() {
   echo "<ul>";
     foreach ( $beers as $post ) : setup_postdata( $post );
       echo '<li>';
-        $brew = wp_get_post_terms( $post->ID, 'brew' );
+        $brew = wp_get_post_terms( $post->ID, $taxonomy_brew );
         echo $brew[0]->name;
 
         $score = get_post_meta( $post->ID, 'rating_score', true );
@@ -140,10 +141,8 @@ function beers_shortcode() {
           $score = "Unknown";
         }
 
-        $count = get_post_meta( $post->ID, 'count', true );
-        if (!$count) {
-          $count = "Unknown";
-        }
+        $query = new WP_Query( array( $taxonomy_brew => $brew[0]->name ) );
+        $count = $query->found_posts;
 
         echo " (Score: " . $score . ", Drinked: " . $count . ")";
       echo '</li>';
@@ -183,7 +182,7 @@ function beers_shortcode() {
   echo "<ul>";
     foreach ( $beers as $post ) : setup_postdata( $post );
       echo '<li>';
-        $brew = wp_get_post_terms( $post->ID, 'brew' );
+        $brew = wp_get_post_terms( $post->ID, $taxonomy_brew );
         echo $brew[0]->name;
 
         $score = get_post_meta( $post->ID, 'rating_score', true );
@@ -233,7 +232,7 @@ function beers_shortcode() {
   echo "<ul>";
     foreach ( $beers as $post ) : setup_postdata( $post );
       echo '<li>';
-        $brew = wp_get_post_terms( $post->ID, 'brew' );
+        $brew = wp_get_post_terms( $post->ID, $taxonomy_brew );
         echo $brew[0]->name;
 
         $score = get_post_meta( $post->ID, 'rating_score', true );
@@ -268,7 +267,7 @@ function beers_shortcode() {
   echo "<ul>";
     foreach ( $beers as $post ) : setup_postdata( $post );
       echo '<li>';
-        $brew = wp_get_post_terms( $post->ID, 'brew' );
+        $brew = wp_get_post_terms( $post->ID, $taxonomy_brew );
         echo $brew[0]->name;
 
         $score = get_post_meta( $post->ID, 'rating_score', true );
