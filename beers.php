@@ -215,8 +215,12 @@ function beers_shortcode() {
     $brew_id = get_post_meta( $beer->ID, 'bid', true );
 
     // Get the brew
-    $brew = wp_get_post_terms( $beer->ID, $taxonomy_brew );
-    $beer->count = $brew->count;
+    $which_brew = wp_get_post_terms( $beer->ID, $taxonomy_brew );
+    print_r($which_brew);
+
+    $brew = get_term( $which_brew->term_id, $taxonomy_brew);
+    print_r($brew);
+    // $beer->count = $brew->count;
 
     if (array_search($brew_id, $printed_brews)) {
       unset($beers[$key]);
