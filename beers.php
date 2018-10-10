@@ -227,9 +227,9 @@ function beers_shortcode() {
     $beer->score = $score;
   }
 
-  // usort($beers, function($a, $b) {
-  //   return $a['score'] <=> $b['score'];
-  // });
+  usort($beers, function($a, $b) {
+    return $a['score'] <=> $b['score'];
+  });
 
   echo "<h2>Best Rated</h2>";
   echo "<ul>";
