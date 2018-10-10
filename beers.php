@@ -216,31 +216,16 @@ function beers_shortcode() {
 
   $beers = get_posts( $args );
 
-  // We are quering all the beers ordered by Score.
-  // Now we loop them all and add the score to it, to then re order that array
-  foreach ( $beers as $beer ) {
-    $score = get_post_meta( $beer->ID, 'rating_score', true );
-    if (!$score) {
-      $score = 0;
-    }
-
-    $beer->score = $score;
-  }
-
-  usort($beers, function($a, $b) {
-    return $a['score'] <=> $b['score'];
-  });
-
   echo "<h2>Best Rated</h2>";
   echo "<ul>";
-    foreach ( $beers as $post ) : setup_postdata( $post );
+    foreach ( $beers as $beer ) : setup_postdata( $beer );
       echo '<li>';
-        $brew = wp_get_post_terms( $post->ID, $taxonomy_brew );
+        $brew = wp_get_post_terms( $beer->ID, $taxonomy_brew );
         echo $brew[0]->name;
 
-        $score = $post->score;
+        $score = get_post_meta( $beer->ID, 'rating_score', true );
         if (!$score) {
-          $score = "Unknown";
+          $score = 0;
         }
 
         $query = new WP_Query( array( $taxonomy_brew => $brew[0]->name ) );
@@ -269,17 +254,17 @@ function beers_shortcode() {
 
   echo "<h2>All ever tasted</h2>";
   echo "<ul>";
-    foreach ( $beers as $post ) : setup_postdata( $post );
+    foreach ( $beers as $beer ) : setup_postdata( $beer );
       echo '<li>';
-        $brew = wp_get_post_terms( $post->ID, $taxonomy_brew );
+        $brew = wp_get_post_terms( $beer->ID, $taxonomy_brew );
         echo $brew[0]->name;
 
-        $score = get_post_meta( $post->ID, 'rating_score', true );
+        $score = get_post_meta( $beer->ID, 'rating_score', true );
         if (!$score) {
           $score = "Unknown";
         }
 
-        $count = get_post_meta( $post->ID, 'count', true );
+        $count = get_post_meta( $beer->ID, 'count', true );
         if (!$count) {
           $count = "Unknown";
         }
