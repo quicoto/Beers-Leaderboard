@@ -200,16 +200,8 @@ function beers_shortcode() {
   */
   $args = array(
     'posts_per_page' => 10,
-    'meta_query' => array(
-        'score_clause' => array(
-            'key' => 'rating_score',
-            'type'    => 'NUMERIC',
-            'compare' => 'EXISTS'
-        )
-    ),
-    'orderby' => array(
-      'score_clause' => 'DESC'
-    ),
+    'meta_key' => 'rating_score',
+    'orderby'   => 'meta_value_num',
     'post_type' => 'beer'
   );
 
