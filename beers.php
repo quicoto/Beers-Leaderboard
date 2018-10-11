@@ -197,67 +197,6 @@ function beers_shortcode() {
   wp_reset_postdata();
 
   /*
-    Best Rated
-  */
-  $args = array(
-    'posts_per_page' => -1,
-    'meta_key' => 'rating_score',
-    'orderby'   => 'meta_value_num',
-    'post_type' => 'beer'
-  );
-
-  $beers = get_posts( $args );
-
-  $printed_brews = [];
-
-  // Add all the unique beers
-  foreach ( $beers as $key => $beer ) {
-    $brew_id = get_post_meta( $beer->ID, 'bid', true );
-
-    // Get the brew
-    $which_brew = wp_get_post_terms( $beer->ID, $taxonomy_brew );
-    $brew = get_term( $which_brew[0]->term_id, $taxonomy_brew);
-    $beer->count = $brew[0]->count;
-
-    if (array_search($brew_id, $printed_brews)) {
-      unset($beers[$key]);
-    } else {
-      array_push($printed_brews, $brew_id);
-    }
-  }
-
-  echo "<pre>";
-  print_r($beers);
-
-  echo "<h2>Best Rated</h2>";
-  echo "<ul>";
-    $index = 1;
-    foreach ( $beers as $beer ) :
-      // if ($index == 5) break;
-      setup_postdata( $beer );
-      echo '<li>';
-        $brew = wp_get_post_terms( $beer->ID, $taxonomy_brew );
-        echo $brew[0]->name;
-
-        $score = get_post_meta( $beer->ID, 'rating_score', true );
-        if (!$score) {
-          $score = 0;
-        }
-
-        $query = new WP_Query( array( $taxonomy_brew => $brew[0]->name ) );
-        $count = $query->found_posts;
-        if (!$count) {
-          $count = "Unknown";
-        }
-
-        echo " (Score: " . $score . ", Drinked: " . $count . ")";
-      echo '</li>';
-      $index++;
-    endforeach;
-  echo "</ul>";
-  wp_reset_postdata();
-
-  /*
     All Beers
   */
   $brews = get_terms( $taxonomy_brew, 'orderby=name&order=ASC&hide_empty=0' );
